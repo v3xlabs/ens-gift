@@ -9,3 +9,7 @@
 .card {
     @apply bg-light-background-primary border-light-border dark:bg-dark-background-primary dark:border-dark-border rounded-xl;
 }
+
+.label {
+    @apply px-1 py-0.5 bg-light-blue-surface dark:bg-dark-blue-surface text-light-blue-primary dark:text-dark-blue-primary rounded-md;
+}
