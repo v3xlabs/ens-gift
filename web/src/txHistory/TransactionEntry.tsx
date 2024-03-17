@@ -98,7 +98,7 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
 
     return (
         <div className="p-4 card w-full space-y-3">
-            <div className="flex justify-between items-center gap-4">
+            <div className="flex justify-between items-center gap-4 flex-wrap">
                 <div>
                     <a
                         href={'https://etherscan.io/tx/' + txHash.hash}
