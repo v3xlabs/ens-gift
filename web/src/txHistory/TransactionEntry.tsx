@@ -7,7 +7,10 @@ import { decodeFunctionData } from 'viem';
 
 import { ultraBulkAbi } from '../abi';
 import { EtherscanTx } from '../etherscan/getTransactions';
+import { formatFullAndRelativeDate } from '../utils/date';
+import { useEthUsd } from '../utils/ethUsd';
 import { formatThousands } from '../utils/formatThousands';
+import { gasToEth } from '../utils/gas';
 
 type DecodedFunction<K, V> = { functionName: K; args: V };
 type MultiRegisterType = DecodedFunction<
@@ -93,8 +96,13 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
         txHash.to
     );
     const inputData = decodeFunctionInput(txHash.input, txHash.to);
+    const ethUsd = useEthUsd(Number(txHash.timeStamp) * 1000);
 
     const namesLength = getNameLength(inputData);
+
+    const { full, relative } = formatFullAndRelativeDate(
+        new Date(Number(txHash.timeStamp) * 1000)
+    );
 
     return (
         <div className="p-4 card w-full space-y-3">
@@ -107,11 +115,14 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
                         {txHash.hash.slice(0, 8)}...
                     </a>
                 </div>
-                <div className="flex justify-center items-center gap-1">
+                <div
+                    className="flex justify-center items-center gap-1"
+                    title="Blocknumber"
+                >
                     <FiBox />
                     {txHash.blockNumber}
                 </div>
-                <div>{/* txHash.timestamp */}5 seconds ago</div>
+                <div title={full}>{relative}</div>
                 <div>
                     <span className="label label-blue">{actionLabel}</span>
                 </div>
@@ -132,9 +143,23 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
                         <div className="text-xs">Per Name</div>
                     </div>
                 )}
-                <div className="flex justify-center items-center gap-1">
-                    <BsFuelPump />
-                    <div>{formatThousands(BigInt(txHash.gasUsed))}</div>
+                <div className="flex flex-col justify-center items-center gap-1">
+                    <div className="flex justify-center items-center gap-1">
+                        <BsFuelPump />
+                        <div>{formatThousands(BigInt(txHash.gasUsed))}</div>
+                    </div>
+                    {ethUsd.data && (
+                        <div className="text-sm opacity-70">
+                            {(
+                                ethUsd.data *
+                                gasToEth(
+                                    BigInt(txHash.gasUsed),
+                                    BigInt(txHash.gasPrice)
+                                )
+                            ).toFixed(2)}{' '}
+                            USD
+                        </div>
+                    )}
                 </div>
                 <div className="flex justify-center items-center gap-1">
                     <LuFlame />
