@@ -1,3 +1,5 @@
+import { TransactionHistory } from "./txHistory/TransactionHistory";
+
 export const App = () => {
 
     return (
@@ -15,6 +17,7 @@ export const App = () => {
                     <div className="card w-full p-4">Registration Fee</div>
                     <div className="card w-full p-4">Renewal Fee</div>
                 </div>
+                <TransactionHistory contractAddress="0xFC0a4A934410F34A9bb8b4F28bEd6b960C943a7E" />
             </div>
         </div>
     );
