@@ -1,12 +1,28 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { FC } from 'react';
-import { FiBox } from 'react-icons/fi';
+import { BsFuelPump } from 'react-icons/bs';
+import { FiBox, FiChevronDown } from 'react-icons/fi';
 import { LuFlame } from 'react-icons/lu';
 import { decodeFunctionData } from 'viem';
 
 import { ultraBulkAbi } from '../abi';
 import { EtherscanTx } from '../etherscan/getTransactions';
+import { formatThousands } from '../utils/formatThousands';
 
-const decodeFunctionInput = (inputData: string, to: string) => {
+type DecodedFunction<K, V> = { functionName: K; args: V };
+type MultiRegisterType = DecodedFunction<
+    'multiRegister',
+    [string[], string[], bigint, string, string]
+>;
+type MultiCommitType = DecodedFunction<'multiCommit', [string[]]>;
+type MultiRenewType = DecodedFunction<'renewAll', [string[], bigint, bigint]>;
+
+type AllMultiReturnTypes = MultiRegisterType | MultiCommitType | MultiRenewType;
+
+const decodeFunctionInput = (
+    inputData: string,
+    to: string
+): AllMultiReturnTypes | undefined => {
     // If contract Create
     if (to == '') {
         return;
@@ -19,14 +35,24 @@ const decodeFunctionInput = (inputData: string, to: string) => {
         });
 
         if (functionName == 'multiRegister' && args) {
-            console.log(args);
-            const names = args[0] as string[];
-            const owners = args[1] as string[];
-            const duration = args[2] as bigint;
-            const secret = args[3] as string;
-            const resolver = args[4] as string;
+            return {
+                functionName,
+                args,
+            } as MultiRegisterType;
+        }
 
-            return { functionName, names, owners, duration, secret, resolver };
+        if (functionName == 'multiCommit' && args) {
+            return {
+                functionName,
+                args,
+            } as MultiCommitType;
+        }
+
+        if (functionName == 'renewAll' && args) {
+            return {
+                functionName,
+                args,
+            } as MultiRenewType;
         }
     } catch (error) {
         console.error({ e: error });
@@ -45,6 +71,22 @@ const deriveLabelFromFunctionName = (functionName: string, to: string) => {
     return `Unknown (${functionName.split('(').shift()})`;
 };
 
+const getNameLength = (inputData?: AllMultiReturnTypes) => {
+    if (!inputData) return;
+
+    if (inputData.functionName == 'multiRegister') {
+        return inputData.args[0].length;
+    }
+
+    if (inputData.functionName == 'multiCommit') {
+        return inputData.args[0].length;
+    }
+
+    if (inputData.functionName == 'renewAll') {
+        return inputData.args[0].length;
+    }
+};
+
 export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
     const actionLabel = deriveLabelFromFunctionName(
         txHash.functionName,
@@ -52,14 +94,11 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
     );
     const inputData = decodeFunctionInput(txHash.input, txHash.to);
 
-    const namesLength =
-        inputData?.functionName == 'multiRegister'
-            ? inputData.names.length
-            : undefined;
+    const namesLength = getNameLength(inputData);
 
     return (
-        <div className="p-4 card w-full">
-            <div className="flex justify-between">
+        <div className="p-4 card w-full space-y-3">
+            <div className="flex justify-between items-center">
                 <div>
                     <a
                         href={'https://etherscan.io/tx/' + txHash.hash}
@@ -73,27 +112,49 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
                     {txHash.blockNumber}
                 </div>
                 <div>{/* txHash.timestamp */}5 seconds ago</div>
+                <div>
+                    <span className="label label-blue">{actionLabel}</span>
+                </div>
+                {namesLength && (
+                    <div className="text-center">
+                        <div>{namesLength}</div>
+                        <div className="text-xs">names</div>
+                    </div>
+                )}
+                {namesLength && (
+                    <div className="text-center">
+                        <div>
+                            {formatThousands(
+                                BigInt(txHash.gasUsed) / BigInt(namesLength)
+                            )}
+                        </div>
+                        <div className="text-xs">Per Name</div>
+                    </div>
+                )}
+                <div className="flex justify-center items-center gap-1">
+                    <BsFuelPump />
+                    <div>{formatThousands(BigInt(txHash.gasUsed))}</div>
+                </div>
                 <div className="flex justify-center items-center gap-1">
                     <LuFlame />
                     {(Number(BigInt(txHash.gasPrice) / 100_000_000n) / 10)
                         .toPrecision(2)
                         .toString()}
                 </div>
-                <div>
-                    <span className="label label-blue">{actionLabel}</span>
-                </div>
-                {namesLength && (
-                    <div className="text-center">
-                        <div>{}</div>
-                        <div className="text-xs">names</div>
-                    </div>
-                )}
-                <div>
-                    <span>Per Name</span>
-                </div>
+                <label
+                    htmlFor={'car-' + txHash.hash}
+                    className="cursor-pointer rounded-full p-2 hover:bg-light-background-secondary dark:hover:bg-dark-background-secondary"
+                >
+                    <FiChevronDown />
+                </label>
             </div>
-            <div className="whitespace-break-spaces w-full">
-                Transaction: <span>{JSON.stringify(txHash)}</span>
+            <input
+                type="checkbox"
+                id={'car-' + txHash.hash}
+                className="hidden"
+            />
+            <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary rounded-lg p-4 open-if-checkbox">
+                <span>{JSON.stringify(txHash)}</span>
             </div>
         </div>
     );
