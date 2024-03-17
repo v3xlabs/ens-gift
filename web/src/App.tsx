@@ -1,5 +1,7 @@
 import { TransactionHistory } from './txHistory/TransactionHistory';
 
+const resolverAddress = '0xFC0a4A934410F34A9bb8b4F28bEd6b960C943a7E';
+
 export const App = () => {
     return (
         <div className="w-full h-full min-h-screen bg-light-background-secondary dark:bg-dark-background-secondary px-4">
@@ -12,13 +14,25 @@ export const App = () => {
                         registrations and renewals. With as much flexibility as
                         you might need.
                     </p>
+                    <div className="text-right">
+                        <a
+                            href={
+                                'https://etherscan.io/contract/' +
+                                resolverAddress
+                            }
+                            className="link"
+                            target="_blank"
+                        >
+                            View on Etherscan
+                        </a>
+                    </div>
                 </div>
                 <div className="flex gap-4 w-full flex-col md:flex-row">
                     <div className="card w-full p-4">Commit Fee</div>
                     <div className="card w-full p-4">Registration Fee</div>
                     <div className="card w-full p-4">Renewal Fee</div>
                 </div>
-                <TransactionHistory contractAddress="0xFC0a4A934410F34A9bb8b4F28bEd6b960C943a7E" />
+                <TransactionHistory contractAddress={resolverAddress} />
             </div>
         </div>
     );
