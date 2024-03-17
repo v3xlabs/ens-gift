@@ -155,24 +155,41 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
                 className="hidden"
             />
             <div className="open-if-checkbox space-y-2">
-                <div className="flex gap-2 border border-light-border dark:border-dark-border p-2 rounded-lg">
-                    <div>Names</div>
-                    <div>
-                        <ul className="grid grid-cols-2 gap-2">
-                            {inputData?.args[0].map((name, _index) => (
-                                <li>
-                                    <a
-                                        href={'https://ens.app/' + name}
-                                        className="link"
-                                        target="_blank"
-                                    >
-                                        {name}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
+                {inputData?.functionName === 'multiRegister' ||
+                    (inputData?.functionName === 'renewAll' && (
+                        <div className="flex gap-2 border border-light-border dark:border-dark-border p-2 rounded-lg">
+                            <div>Names</div>
+                            <div>
+                                <ul className="grid grid-cols-2 gap-2">
+                                    {inputData?.args[0].map((name, _index) => (
+                                        <li>
+                                            <a
+                                                href={'https://ens.app/' + name}
+                                                className="link"
+                                                target="_blank"
+                                            >
+                                                {name}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    ))}
+                {inputData?.functionName === 'multiCommit' && (
+                    <div className="flex gap-2 border border-light-border dark:border-dark-border p-2 rounded-lg">
+                        <div>Commitments</div>
+                        <div>
+                            <ul className="grid grid-cols-2 gap-2">
+                                {inputData?.args[0].map(
+                                    (commitment, _index) => (
+                                        <li>{commitment}</li>
+                                    )
+                                )}
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                )}
                 <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary rounded-lg p-4">
                     <span>{JSON.stringify(txHash)}</span>
                 </div>
