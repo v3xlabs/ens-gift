@@ -17,7 +17,7 @@ export const App = () => {
                     <div className="text-right">
                         <a
                             href={
-                                'https://etherscan.io/contract/' +
+                                'https://etherscan.io/address/' +
                                 resolverAddress
                             }
                             className="link"
