@@ -11,7 +11,7 @@
         "resolveJsonModule": true,
         "target": "ES2022",
         "module": "Node16",
-        "moduleResolution": "node",
+        "moduleResolution": "Node16",
         "strictNullChecks": true,
         "isolatedModules": true,
         "jsx": "preserve",
