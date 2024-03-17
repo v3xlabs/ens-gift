@@ -5,3 +5,7 @@
 .link {
     @apply font-bold text-blue-500 hover:underline cursor-pointer;
 }
+
+.card {
+    @apply bg-light-background-primary border-light-border dark:bg-dark-background-primary dark:border-dark-border rounded-xl;
+}
