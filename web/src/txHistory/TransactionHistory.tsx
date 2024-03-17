@@ -17,7 +17,9 @@ export const TransactionHistory: FC<{ contractAddress: string }> = ({
 
     return (
         <div>
-            <h2>Recent Transactions</h2>
+            <h2 className="px-2 py-2 font-bold text-light-text-secondary dark:text-dark-text-secondary">
+                Recent Transactions
+            </h2>
             {isLoading && (
                 <div className="card w-full p-4">
                     <p>Loading...</p>
