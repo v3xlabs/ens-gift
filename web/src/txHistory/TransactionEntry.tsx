@@ -1,9 +1,41 @@
 import { FC } from 'react';
 import { FiBox } from 'react-icons/fi';
 import { LuFlame } from 'react-icons/lu';
-import { EtherscanTx } from 'src/etherscan/getTransactions';
+import { decodeFunctionData } from 'viem';
 
-const deriveLabelFromFunctionName = (functionName: string) => {
+import { ultraBulkAbi } from '../abi';
+import { EtherscanTx } from '../etherscan/getTransactions';
+
+const decodeFunctionInput = (inputData: string, to: string) => {
+    // If contract Create
+    if (to == '') {
+        return;
+    }
+
+    try {
+        const { args, functionName } = decodeFunctionData({
+            abi: ultraBulkAbi,
+            data: inputData as '0x{string}',
+        });
+
+        if (functionName == 'multiRegister' && args) {
+            console.log(args);
+            const names = args[0] as string[];
+            const owners = args[1] as string[];
+            const duration = args[2] as bigint;
+            const secret = args[3] as string;
+            const resolver = args[4] as string;
+
+            return { functionName, names, owners, duration, secret, resolver };
+        }
+    } catch (error) {
+        console.error({ e: error });
+    }
+};
+
+const deriveLabelFromFunctionName = (functionName: string, to: string) => {
+    if (to == '') return 'Deploy';
+
     if (functionName.startsWith('multiRegister(')) return 'Register';
 
     if (functionName.startsWith('multiCommit(')) return 'Commit';
@@ -14,7 +46,16 @@ const deriveLabelFromFunctionName = (functionName: string) => {
 };
 
 export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
-    const actionLabel = deriveLabelFromFunctionName(txHash.functionName);
+    const actionLabel = deriveLabelFromFunctionName(
+        txHash.functionName,
+        txHash.to
+    );
+    const inputData = decodeFunctionInput(txHash.input, txHash.to);
+
+    const namesLength =
+        inputData?.functionName == 'multiRegister'
+            ? inputData.names.length
+            : undefined;
 
     return (
         <div className="p-4 card w-full">
@@ -41,6 +82,12 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
                 <div>
                     <span className="label label-blue">{actionLabel}</span>
                 </div>
+                {namesLength && (
+                    <div className="text-center">
+                        <div>{}</div>
+                        <div className="text-xs">names</div>
+                    </div>
+                )}
                 <div>
                     <span>Per Name</span>
                 </div>

@@ -41,7 +41,7 @@ export const TransactionHistory: FC<{ contractAddress: string }> = ({
                     {data.result.length > 0 && (
                         <div className="space-y-2">
                             {data.result.map((tx) => (
-                                <TransactionEntry txHash={tx} />
+                                <TransactionEntry txHash={tx} key={tx.hash} />
                             ))}
                         </div>
                     )}

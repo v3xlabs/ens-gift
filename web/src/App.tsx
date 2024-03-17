@@ -2,7 +2,7 @@ import { TransactionHistory } from './txHistory/TransactionHistory';
 
 export const App = () => {
     return (
-        <div className="w-full h-full min-h-screen bg-light-background-secondary dark:bg-dark-background-secondary">
+        <div className="w-full h-full min-h-screen bg-light-background-secondary dark:bg-dark-background-secondary px-4">
             <div className="mx-auto w-full max-w-3xl space-y-4 py-8">
                 <div className="card w-full p-4">
                     <h1 className="text-xl">UltraBulk.eth</h1>
