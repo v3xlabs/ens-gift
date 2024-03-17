@@ -98,7 +98,7 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
 
     return (
         <div className="p-4 card w-full space-y-3">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-4">
                 <div>
                     <a
                         href={'https://etherscan.io/tx/' + txHash.hash}
@@ -115,6 +115,7 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
                 <div>
                     <span className="label label-blue">{actionLabel}</span>
                 </div>
+                {/* <div className="grow"></div> */}
                 {namesLength && (
                     <div className="text-center">
                         <div>{namesLength}</div>

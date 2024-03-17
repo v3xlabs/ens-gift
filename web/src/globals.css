@@ -11,7 +11,7 @@
 }
 
 .label {
-    @apply px-1 py-0.5 bg-light-blue-surface dark:bg-dark-blue-surface text-light-blue-primary dark:text-dark-blue-primary rounded-md;
+    @apply px-1.5 py-0.5 bg-light-blue-surface dark:bg-dark-blue-surface text-light-blue-primary dark:text-dark-blue-primary rounded-md;
 }
 
 input[type="checkbox"]:checked + .open-if-checkbox {
