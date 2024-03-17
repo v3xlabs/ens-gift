@@ -154,8 +154,28 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
                 id={'car-' + txHash.hash}
                 className="hidden"
             />
-            <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary rounded-lg p-4 open-if-checkbox">
-                <span>{JSON.stringify(txHash)}</span>
+            <div className="open-if-checkbox space-y-2">
+                <div className="flex gap-2 border border-light-border dark:border-dark-border p-2 rounded-lg">
+                    <div>Names</div>
+                    <div>
+                        <ul className="grid grid-cols-2 gap-2">
+                            {inputData?.args[0].map((name, _index) => (
+                                <li>
+                                    <a
+                                        href={'https://ens.app/' + name}
+                                        className="link"
+                                        target="_blank"
+                                    >
+                                        {name}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+                <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary rounded-lg p-4">
+                    <span>{JSON.stringify(txHash)}</span>
+                </div>
             </div>
         </div>
     );
