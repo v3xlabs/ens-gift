@@ -6,7 +6,7 @@ export const App = () => {
     return (
         <div className="w-full h-full min-h-screen bg-light-background-secondary dark:bg-dark-background-secondary px-4">
             <div className="mx-auto w-full max-w-3xl space-y-4 py-8">
-                <div className="card w-full p-4">
+                <div className="card w-full p-4 space-y-2">
                     <h1 className="text-xl">UltraBulk.eth</h1>
                     <p>
                         A lightweight and gas-optimized smart contract focused
@@ -28,9 +28,18 @@ export const App = () => {
                     </div>
                 </div>
                 <div className="flex gap-4 w-full flex-col md:flex-row">
-                    <div className="card w-full p-4">Commit Fee</div>
-                    <div className="card w-full p-4">Registration Fee</div>
-                    <div className="card w-full p-4">Renewal Fee</div>
+                    <div className="card w-full px-4 py-2">
+                        <div>Commit Fee</div>
+                        <div className="text-right font-bold text-lg">0.00</div>
+                    </div>
+                    <div className="card w-full px-4 py-2">
+                        <div>Registration Fee</div>
+                        <div className="text-right font-bold text-lg">0.00</div>
+                    </div>
+                    <div className="card w-full px-4 py-2">
+                        <div>Renewal Fee</div>
+                        <div className="text-right font-bold text-lg">0.00</div>
+                    </div>
                 </div>
                 <TransactionHistory contractAddress={resolverAddress} />
             </div>
