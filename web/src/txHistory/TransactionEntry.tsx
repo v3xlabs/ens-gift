@@ -126,7 +126,7 @@ export const TransactionEntry: FC<{ txHash: EtherscanTx }> = ({ txHash }) => {
                 <div>
                     <span className="label label-blue">{actionLabel}</span>
                 </div>
-                {/* <div className="grow"></div> */}
+                <div className="grow"></div>
                 {namesLength && (
                     <div className="text-center">
                         <div>{namesLength}</div>
