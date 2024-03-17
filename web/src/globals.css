@@ -21,3 +21,7 @@ input[type="checkbox"]:checked + .open-if-checkbox {
 input[type="checkbox"]:not(:checked) + .open-if-checkbox {
     @apply hidden;
 }
+
+html {
+    @apply text-light-text-primary dark:text-dark-text-primary;
+}
