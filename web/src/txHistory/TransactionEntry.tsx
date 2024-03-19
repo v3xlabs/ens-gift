@@ -11,7 +11,6 @@ import {
 } from '../utils/decodeTransaction';
 import { useEthUsd } from '../utils/ethUsd';
 import { formatThousands } from '../utils/formatThousands';
-import { gasToEth } from '../utils/gas';
 
 export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
     const actionLabel = deriveLabelFromFunctionName(tx.functionName, tx.tx.to);
@@ -65,18 +64,22 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                         <BsFuelPump />
                         <div>{formatThousands(BigInt(tx.tx.gasUsed))}</div>
                     </div>
-                    {ethUsd.data && (
+                    {ethUsd.data ? (
                         <div className="text-sm opacity-70">
-                            {(
-                                ethUsd.data *
-                                gasToEth(
-                                    BigInt(tx.tx.gasUsed),
-                                    BigInt(tx.tx.gasPrice)
+                            {Number(
+                                Number(
+                                    (ethUsd.data *
+                                        Number(
+                                            (BigInt(tx.tx.gasUsed) *
+                                                BigInt(tx.tx.gasPrice)) /
+                                                1_000_000_000_000_000n
+                                        )) /
+                                        1_000_000
                                 )
                             ).toFixed(2)}{' '}
                             USD
                         </div>
-                    )}
+                    ) : undefined}
                 </div>
                 <div className="flex justify-center items-center gap-1">
                     <LuFlame />
