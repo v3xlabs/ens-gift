@@ -1,20 +1,15 @@
 import { FC } from 'react';
-import useSWR from 'swr';
+import { AllMultiReturnTypes } from 'src/utils/decodeTransaction';
 
-import { getTransactions } from '../etherscan/getTransactions';
 import { TransactionEntry } from './TransactionEntry';
 
-export const TransactionHistory: FC<{ contractAddress: string }> = ({
-    contractAddress,
-}) => {
-    const { data, isLoading, error } = useSWR(
-        '/transactions',
-        async () => await getTransactions(contractAddress),
-        {
-            keepPreviousData: true,
-        }
-    );
-
+export const TransactionHistory: FC<{
+    contractAddress: string;
+    txs?: (AllMultiReturnTypes | undefined)[];
+    totals: any;
+    error: any;
+    isLoading: boolean;
+}> = ({ txs, error, isLoading }) => {
     return (
         <div className="space-y-2">
             <h2 className="px-2 py-2 font-bold text-light-text-secondary dark:text-dark-text-secondary">
@@ -31,17 +26,17 @@ export const TransactionHistory: FC<{ contractAddress: string }> = ({
                     <code>{error.message}</code>
                 </div>
             )}
-            {data && (
+            {txs && (
                 <>
-                    {data.result.length === 0 && (
+                    {txs.length === 0 && (
                         <div>
                             <p>No Txs found</p>
                         </div>
                     )}
-                    {data.result.length > 0 && (
+                    {txs.length > 0 && (
                         <div className="space-y-2">
-                            {data.result.map((tx) => (
-                                <TransactionEntry txHash={tx} key={tx.hash} />
+                            {txs.filter(Boolean).map((tx) => (
+                                <TransactionEntry tx={tx!} key={tx!.tx.hash} />
                             ))}
                         </div>
                     )}
