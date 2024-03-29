@@ -108,11 +108,15 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                                 {tx.args[0].map((name, _index) => (
                                     <li>
                                         <a
-                                            href={'https://ens.app/' + name}
+                                            href={
+                                                'https://ens.app/' +
+                                                name +
+                                                '.eth'
+                                            }
                                             className="link"
                                             target="_blank"
                                         >
-                                            {name}
+                                            {name}.eth
                                         </a>
                                     </li>
                                 ))}
