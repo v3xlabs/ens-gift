@@ -13,7 +13,7 @@ import { useEthUsd } from './utils/ethUsd';
 import { formatThousands } from './utils/formatThousands';
 import { gasPriceMagic } from './utils/gasMagic';
 
-const contractAddress = '0xFC0a4A934410F34A9bb8b4F28bEd6b960C943a7E';
+const contractAddress = '0x7Ff29Bd08AF26495EeB96cb5D80f1813C0410917';
 
 export const App = () => {
     const { data, isLoading, error } = useSWR(
