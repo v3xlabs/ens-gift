@@ -10,6 +10,7 @@ import {
     decodeTransaction,
 } from './utils/decodeTransaction';
 import { useEthUsd } from './utils/ethUsd';
+import { formatGas } from './utils/formatGas';
 import { formatThousands } from './utils/formatThousands';
 import { gasPriceMagic } from './utils/gasMagic';
 
@@ -42,8 +43,6 @@ export const App = () => {
 
     console.log({ currentUSDCPrice });
 
-    const gasPrice = 30n;
-
     return (
         <div className="w-full h-full min-h-screen bg-light-background-secondary dark:bg-dark-background-secondary px-4">
             <div className="mx-auto w-full max-w-3xl space-y-4 py-8">
@@ -58,13 +57,13 @@ export const App = () => {
                     <div className="text-right">
                         <a
                             href={
-                                'https://etherscan.io/address/' +
+                                'https://eth.blockscout.com/address/' +
                                 contractAddress
                             }
                             className="link"
                             target="_blank"
                         >
-                            View on Etherscan
+                            View on Blockscout
                         </a>
                     </div>
                 </div>
@@ -80,13 +79,15 @@ export const App = () => {
                                     <div className="text-light-text-secondary flex justify-between gap-2 items-center">
                                         <div className="flex items-center gap-1">
                                             <BsFuelPump />
-                                            {gasPrice.toString()}
+                                            {formatGas(
+                                                totals.commitGasPriceAverage
+                                            )}
                                         </div>
                                         <div className="text-right flex items-center justify-end">
                                             ~{' '}
                                             {gasPriceMagic(
                                                 totals.commitAverage,
-                                                gasPrice,
+                                                totals.commitGasPriceAverage,
                                                 currentUSDCPrice
                                             )}{' '}
                                             USD
@@ -109,13 +110,15 @@ export const App = () => {
                                     <div className="text-light-text-secondary flex justify-between gap-2 items-center">
                                         <div className="flex items-center gap-1">
                                             <BsFuelPump />
-                                            {gasPrice.toString()}
+                                            {formatGas(
+                                                totals.registerGasPriceAverage
+                                            )}
                                         </div>
                                         <div className="text-right flex items-center justify-end">
                                             ~{' '}
                                             {gasPriceMagic(
                                                 totals.registerAverage,
-                                                gasPrice,
+                                                totals.registerGasPriceAverage,
                                                 currentUSDCPrice
                                             )}{' '}
                                             USD
@@ -138,13 +141,15 @@ export const App = () => {
                                     <div className="text-light-text-secondary flex justify-between gap-2 items-center">
                                         <div className="flex items-center gap-1">
                                             <BsFuelPump />
-                                            {gasPrice.toString()}
+                                            {formatGas(
+                                                totals.renewGasPriceAverage
+                                            )}
                                         </div>
                                         <div className="text-right flex items-center justify-end">
                                             ~{' '}
                                             {gasPriceMagic(
                                                 totals.renewAverage,
-                                                gasPrice,
+                                                totals.renewGasPriceAverage,
                                                 currentUSDCPrice
                                             )}{' '}
                                             USD
