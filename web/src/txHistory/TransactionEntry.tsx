@@ -2,6 +2,7 @@
 import { FC } from 'react';
 import { BsFuelPump } from 'react-icons/bs';
 import { FiBox, FiChevronDown } from 'react-icons/fi';
+import { LuFlame } from 'react-icons/lu';
 
 import { formatFullAndRelativeDate } from '../utils/date';
 import { AllMultiReturnTypes } from '../utils/decodeTransaction';
@@ -30,7 +31,12 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                     </a>
                 </div>
                 <div
-                    className="flex justify-center items-center gap-1"
+                    className={
+                        'flex justify-center items-center gap-1 ' +
+                        (tx.result === 'success'
+                            ? 'text-green-200'
+                            : 'text-red-200')
+                    }
                     title="Blocknumber"
                 >
                     <FiBox />
@@ -38,9 +44,7 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                 </div>
                 <div title={full}>{relative}</div>
                 <div>
-                    <span className="label label-blue">
-                        {actionLabel} {tx.result === 'success' ? '👍' : '👎'}
-                    </span>
+                    <span className="label label-blue">{actionLabel}</span>
                 </div>
                 <div className="grow"></div>
                 {tx.length > 0 && (
@@ -49,16 +53,7 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                         <div className="text-xs">names</div>
                     </div>
                 )}
-                {tx.length > 0 && (
-                    <div className="text-center">
-                        <div>
-                            {formatThousands(
-                                BigInt(tx.gas_used) / BigInt(tx.length)
-                            )}
-                        </div>
-                        <div className="text-xs">Per Name</div>
-                    </div>
-                )}
+
                 <div className="flex flex-col justify-center items-center gap-1">
                     <div className="flex justify-center items-center gap-1">
                         <BsFuelPump />
@@ -80,6 +75,12 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                             USD
                         </div>
                     ) : undefined}
+                </div>
+                <div className="flex justify-center items-center gap-1">
+                    <LuFlame />
+                    {(Number(BigInt(tx.gas_price) / 100_000_000n) / 10)
+                        .toPrecision(2)
+                        .toString()}
                 </div>
                 <label
                     htmlFor={'car-' + tx.hash}
@@ -132,6 +133,16 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                                 ))}
                             </ul>
                         </div>
+                    </div>
+                )}
+                {tx.length > 0 && (
+                    <div className="text-center">
+                        <div>
+                            {formatThousands(
+                                BigInt(tx.gas_used) / BigInt(tx.length)
+                            )}
+                        </div>
+                        <div className="text-xs">Per Name</div>
                     </div>
                 )}
                 <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary text-black rounded-lg p-4">
