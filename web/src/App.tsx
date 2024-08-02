@@ -26,7 +26,7 @@ export const App = () => {
 
     const decodedTransactions = useMemo(
         () =>
-            data?.result.map(decodeTransaction).filter(Boolean) as
+            data?.items.map(decodeTransaction).filter(Boolean) as
                 | AllMultiReturnTypes[]
                 | undefined,
         [data]

@@ -1,20 +1,11 @@
 import { decodeFunctionData } from 'viem';
 
 import { ultraBulkAbi } from '../abi';
-import { EtherscanTx } from '../etherscan/getTransactions';
+import { BlockscoutTx } from '../etherscan/getTransactions';
 
-type DecodedFunction<K, V> = {
-    functionName: K;
-    args: V;
-    length: number;
-    tx: EtherscanTx;
-};
-type MultiRegisterType = DecodedFunction<
-    'multiRegister',
-    [string[], string[], bigint, string, string]
->;
-type MultiCommitType = DecodedFunction<'multiCommit', [string[]]>;
-type MultiRenewType = DecodedFunction<'renewAll', [string[], bigint, bigint]>;
+type MultiRegisterType = BlockscoutTx<'multiRegister'>;
+type MultiCommitType = BlockscoutTx<'multiCommit'>;
+type MultiRenewType = BlockscoutTx<'renewAll'>;
 
 export type AllMultiReturnTypes =
     | MultiRegisterType
@@ -22,7 +13,7 @@ export type AllMultiReturnTypes =
     | MultiRenewType;
 
 export const decodeTransaction = (
-    tx: EtherscanTx
+    tx: BlockscoutTx
 ): AllMultiReturnTypes | undefined => {
     // If contract Create
     if (tx.to == '') {
