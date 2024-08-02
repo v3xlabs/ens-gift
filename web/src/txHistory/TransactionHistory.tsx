@@ -36,7 +36,7 @@ export const TransactionHistory: FC<{
                     {txs.length > 0 && (
                         <div className="space-y-2">
                             {txs.filter(Boolean).map((tx) => (
-                                <TransactionEntry tx={tx!} key={tx!.tx.hash} />
+                                <TransactionEntry tx={tx!} key={tx!.hash} />
                             ))}
                         </div>
                     )}
