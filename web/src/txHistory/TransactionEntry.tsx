@@ -2,12 +2,14 @@
 import { FC } from 'react';
 import { BsFuelPump } from 'react-icons/bs';
 import { FiBox, FiChevronDown } from 'react-icons/fi';
-import { LuFlame } from 'react-icons/lu';
 
 import { formatFullAndRelativeDate } from '../utils/date';
 import { AllMultiReturnTypes } from '../utils/decodeTransaction';
 import { useEthUsd } from '../utils/ethUsd';
 import { formatThousands } from '../utils/formatThousands';
+
+const formatAddress = (address: string) =>
+    address.slice(0, 6) + '...' + address.slice(-4);
 
 export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
     const actionLabel = tx.method;
@@ -36,7 +38,9 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                 </div>
                 <div title={full}>{relative}</div>
                 <div>
-                    <span className="label label-blue">{actionLabel}</span>
+                    <span className="label label-blue">
+                        {actionLabel} {tx.result === 'success' ? '👍' : '👎'}
+                    </span>
                 </div>
                 <div className="grow"></div>
                 {tx.length > 0 && (
@@ -76,12 +80,6 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                             USD
                         </div>
                     ) : undefined}
-                </div>
-                <div className="flex justify-center items-center gap-1">
-                    <LuFlame />
-                    {(Number(BigInt(tx.gas_price) / 100_000_000n) / 10)
-                        .toPrecision(2)
-                        .toString()}
                 </div>
                 <label
                     htmlFor={'car-' + tx.hash}
@@ -123,18 +121,20 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                     <div className="flex gap-2 border border-light-border dark:border-dark-border p-2 rounded-lg">
                         <div>Commitments</div>
                         <div>
-                            <ul className="grid grid-cols-2 gap-2">
+                            <ul className="grid grid-cols-6 gap-2">
                                 {(
                                     tx.decoded_input.parameters[0]
                                         .value as string[]
                                 ).map((commitment, _index) => (
-                                    <li>{commitment}</li>
+                                    <li title={commitment}>
+                                        {formatAddress(commitment)}
+                                    </li>
                                 ))}
                             </ul>
                         </div>
                     </div>
                 )}
-                <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary rounded-lg p-4">
+                <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary text-black rounded-lg p-4">
                     <span>{JSON.stringify(tx)}</span>
                 </div>
             </div>
