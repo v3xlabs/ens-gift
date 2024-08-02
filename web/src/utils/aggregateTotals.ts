@@ -3,6 +3,8 @@ import { AllMultiReturnTypes } from './decodeTransaction';
 export const aggregateTotals = (txs: AllMultiReturnTypes[]) => {
     const aggregates = txs.reduce(
         (aggregate, current) => {
+            if (current.revert_reason != undefined) return aggregate;
+
             if (current?.method == 'renewAll') {
                 aggregate.renewCount += BigInt(current.length);
                 aggregate.renewTotal += BigInt(current.gas_used);
