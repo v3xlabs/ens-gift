@@ -1,11 +1,8 @@
-import { decodeFunctionData } from 'viem';
-
-import { ultraBulkAbi } from '../abi';
 import { BlockscoutTx } from '../etherscan/getTransactions';
 
-type MultiRegisterType = BlockscoutTx<'multiRegister'>;
-type MultiCommitType = BlockscoutTx<'multiCommit'>;
-type MultiRenewType = BlockscoutTx<'renewAll'>;
+type MultiRegisterType = BlockscoutTx<'multiRegister'> & { length: number };
+type MultiCommitType = BlockscoutTx<'multiCommit'> & { length: number };
+type MultiRenewType = BlockscoutTx<'renewAll'> & { length: number };
 
 export type AllMultiReturnTypes =
     | MultiRegisterType
@@ -13,50 +10,75 @@ export type AllMultiReturnTypes =
     | MultiRenewType;
 
 export const decodeTransaction = (
-    tx: BlockscoutTx
+    tx: BlockscoutTx<any>
 ): AllMultiReturnTypes | undefined => {
-    // If contract Create
-    if (tx.to == '') {
+    // If contract Create skip
+    if (!tx.to) {
         return;
     }
 
-    try {
-        const { args, functionName } = decodeFunctionData({
-            abi: ultraBulkAbi,
-            data: tx.input as '0x{string}',
-        });
-
-        const length = getNameLength(functionName, args as any);
-
-        if (functionName == 'multiRegister' && args) {
-            return {
-                functionName,
-                args,
-                length,
-                tx,
-            } as MultiRegisterType;
-        }
-
-        if (functionName == 'multiCommit' && args) {
-            return {
-                functionName,
-                args,
-                length,
-                tx,
-            } as MultiCommitType;
-        }
-
-        if (functionName == 'renewAll' && args) {
-            return {
-                functionName,
-                args,
-                length,
-                tx,
-            } as MultiRenewType;
-        }
-    } catch (error) {
-        console.error({ e: error });
+    if (
+        tx.method == 'multiRegister' &&
+        Array.isArray(tx.decoded_input.parameters[0].value)
+    ) {
+        return {
+            ...tx,
+            length: tx.decoded_input.parameters[0].value.length,
+        } as MultiRegisterType;
     }
+
+    if (tx.method == 'multiCommit') {
+        return {
+            ...tx,
+            length: tx.decoded_input.parameters[0].value.length,
+        } as MultiCommitType;
+    }
+
+    if (tx.method == 'renewAll') {
+        return {
+            ...tx,
+            length: tx.decoded_input.parameters[0].value.length,
+        } as MultiRenewType;
+    }
+
+    // try {
+    //     const { args, functionName } = decodeFunctionData({
+    //         abi: ultraBulkAbi,
+    //         data: tx.input as '0x{string}',
+    //     });
+
+    //     const length = getNameLength(functionName, args as any);
+
+    //     if (functionName == 'multiRegister' && args) {
+    //         return {
+    //             functionName,
+    //             args,
+    //             length,
+    //             tx,
+    //         } as MultiRegisterType;
+    //     }
+
+    //     if (functionName == 'multiCommit' && args) {
+    //         return {
+    //             functionName,
+    //             args,
+    //             length,
+    //             tx,
+    //         } as MultiCommitType;
+    //     }
+
+    //     if (functionName == 'renewAll' && args) {
+    //         return {
+    //             functionName,
+    //             args,
+    //             length,
+    //             tx,
+    //         } as MultiRenewType;
+    //     }
+    // } catch (error) {
+    //     console.error({ e: error });
+    // }
+    return tx;
 };
 
 export const deriveLabelFromFunctionName = (

@@ -3,19 +3,19 @@ import { AllMultiReturnTypes } from './decodeTransaction';
 export const aggregateTotals = (txs: AllMultiReturnTypes[]) => {
     const aggregates = txs.reduce(
         (aggregate, current) => {
-            if (current?.functionName == 'renewAll') {
+            if (current?.method == 'renewAll') {
                 aggregate.renewCount += BigInt(current.length);
-                aggregate.renewTotal += BigInt(current.tx.gasUsed);
+                aggregate.renewTotal += BigInt(current.gas_used);
             }
 
-            if (current?.functionName == 'multiCommit') {
+            if (current?.method == 'multiCommit') {
                 aggregate.commitCount += BigInt(current.length);
-                aggregate.commitTotal += BigInt(current.tx.gasUsed);
+                aggregate.commitTotal += BigInt(current.gas_used);
             }
 
-            if (current?.functionName == 'multiRegister') {
+            if (current?.method == 'multiRegister') {
                 aggregate.registerCount += BigInt(current.length);
-                aggregate.registerTotal += BigInt(current.tx.gasUsed);
+                aggregate.registerTotal += BigInt(current.gas_used);
             }
 
             return aggregate;
