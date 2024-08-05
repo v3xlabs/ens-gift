@@ -145,8 +145,11 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                         <div className="text-xs">Per Name</div>
                     </div>
                 )}
-                <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary text-black rounded-lg p-4">
-                    <span>{JSON.stringify(tx)}</span>
+
+                <div className="whitespace-break-spaces break-words w-full overflow-hidden bg-light-background-secondary text-light-text-primary dark:bg-dark-background-secondary dark:text-dark-text-primary rounded-lg p-4">
+                    <span>
+                        {JSON.stringify(tx.decoded_input, undefined, 2)}
+                    </span>
                 </div>
             </div>
         </div>
