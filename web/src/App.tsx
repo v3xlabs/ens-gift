@@ -25,14 +25,13 @@ export const App = () => {
         }
     );
 
-    const decodedTransactions = useMemo(
-        () =>
-            data &&
-            (data?.items.map(decodeTransaction).filter(Boolean) as
-                | AllMultiReturnTypes[]
-                | undefined),
-        [data]
-    );
+    const decodedTransactions = useMemo(() => {
+        if (!data || !data.items) return;
+
+        return data?.items.map(decodeTransaction).filter(Boolean) as
+            | AllMultiReturnTypes[]
+            | undefined;
+    }, [data]);
 
     const totals = useMemo(() => {
         if (!decodedTransactions) return;
