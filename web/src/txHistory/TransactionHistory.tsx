@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { AllMultiReturnTypes } from 'src/utils/decodeTransaction';
 
+import { PredictNext } from './PredictNext';
 import { TransactionEntry } from './TransactionEntry';
 
 export const TransactionHistory: FC<{
@@ -12,9 +13,12 @@ export const TransactionHistory: FC<{
 }> = ({ txs, error, isLoading }) => {
     return (
         <div className="space-y-2">
-            <h2 className="px-2 py-2 font-bold text-light-text-secondary dark:text-dark-text-secondary">
-                Recent Transactions
-            </h2>
+            <div className="flex justify-between items-center gap-4 flex-wrap">
+                <h2 className="px-2 py-2 font-bold text-light-text-secondary dark:text-dark-text-secondary">
+                    Recent Transactions
+                </h2>
+                <PredictNext />
+            </div>
             {isLoading && (
                 <div className="card w-full p-4">
                     <p>Loading...</p>
