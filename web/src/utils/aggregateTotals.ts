@@ -1,5 +1,7 @@
 import { AllMultiReturnTypes } from './decodeTransaction';
 
+// gas_price - 9 decimals
+
 export const aggregateTotals = (txs: AllMultiReturnTypes[]) => {
     const aggregates = txs.reduce(
         (aggregate, current) => {
@@ -37,6 +39,8 @@ export const aggregateTotals = (txs: AllMultiReturnTypes[]) => {
             registerCount: 0n,
         }
     );
+
+    console.log({ aggregates });
 
     return {
         commitAverage: aggregates.commitTotal / aggregates.commitCount,

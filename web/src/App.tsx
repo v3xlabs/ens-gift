@@ -137,14 +137,12 @@ export const App = () => {
                                 <div className="text-right font-bold text-lg">
                                     {formatThousands(totals.renewAverage)}
                                 </div>
-                                {currentUSDCPrice ? (
-                                    <div className="text-light-text-secondary flex justify-between gap-2 items-center">
-                                        <div className="flex items-center gap-1">
-                                            <BsFuelPump />
-                                            {formatGas(
-                                                totals.renewGasPriceAverage
-                                            )}
-                                        </div>
+                                <div className="text-light-text-secondary flex justify-between gap-2 items-center">
+                                    <div className="flex items-center gap-1">
+                                        <BsFuelPump />
+                                        {formatGas(totals.renewGasPriceAverage)}
+                                    </div>
+                                    {currentUSDCPrice ? (
                                         <div className="text-right flex items-center justify-end">
                                             ~{' '}
                                             {gasPriceMagic(
@@ -154,8 +152,8 @@ export const App = () => {
                                             )}{' '}
                                             USD
                                         </div>
-                                    </div>
-                                ) : undefined}
+                                    ) : undefined}
+                                </div>
                             </div>
                         ) : (
                             <div>Loading...</div>

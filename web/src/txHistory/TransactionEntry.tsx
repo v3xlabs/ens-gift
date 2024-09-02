@@ -7,6 +7,7 @@ import { FiBox, FiChevronDown } from 'react-icons/fi';
 import { formatFullAndRelativeDate } from '../utils/date';
 import { AllMultiReturnTypes } from '../utils/decodeTransaction';
 import { useEthUsd } from '../utils/ethUsd';
+import { formatGas } from '../utils/formatGas';
 import { formatThousands } from '../utils/formatThousands';
 
 const formatAddress = (address: string) =>
@@ -59,18 +60,28 @@ export const TransactionEntry: FC<{ tx: AllMultiReturnTypes }> = ({ tx }) => {
                 )}
                 {tx.length > 0 && (
                     <div className="text-center">
-                        <div>
-                            {formatThousands(
-                                BigInt(tx.gas_used) / BigInt(tx.length)
-                            )}
+                        <div className="text-sm">
+                            <span>
+                                {formatThousands(
+                                    BigInt(tx.gas_used) / BigInt(tx.length)
+                                )}
+                                {tx.length > 1 && ' each'}
+                            </span>
                         </div>
-                        <div className="text-xs">Per Name</div>
+                        {tx.length > 1 && (
+                            <span className="text-xs">
+                                <span>
+                                    {formatThousands(BigInt(tx.gas_used))}
+                                </span>{' '}
+                                total
+                            </span>
+                        )}
                     </div>
                 )}
                 <div className="flex flex-col justify-center items-center gap-1">
                     <div className="flex justify-center items-center gap-1">
                         <BsFuelPump />
-                        <div>{formatThousands(BigInt(tx.gas_used))}</div>
+                        <div>{formatGas(BigInt(tx.gas_price))}</div>
                     </div>
                     {ethUsd.data ? (
                         <div className="text-sm opacity-70">
